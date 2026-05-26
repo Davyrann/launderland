@@ -21,43 +21,47 @@
             </a>
         </header>
         <main
-            class="overflow-auto bg-[url('./cat.webp')] bg-center p-4 *:p-2 *:bg-lpink-100 *:border-2 *:border-lpink-700 text-lpink-700 *:border-b-0 *:last:border-b-2"
+            class="overflow-auto bg-[url('./cat.webp')] bg-center p-4 text-lpink-700"
         >
-            <button
-                class="w-min flex font-semibold mb-4 btn border-b-2!"
-                onclick="window.location.href = '/'"
+            <div
+                class="*:border-b-0 *:last:border-b-2 *:p-2 *:bg-lpink-100 *:border-2 *:border-lpink-700 max-w-2xl mx-auto"
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="size-6"
+                <button
+                    class="w-min flex font-semibold mb-4 btn border-b-2!"
+                    onclick="window.location.href = '/'"
                 >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15.75 19.5 8.25 12l7.5-7.5"
-                    />
-                </svg>
-                Kembali
-            </button>
-            <p class="rounded-t-md">
-                Nama: <span class="font-bold" id="nama">Budi</span>
-            </p>
-            <p class="flex flex-col h-40 gap-2">
-                Pakaian:
-                <textarea
-                    disabled
-                    class="font-bold h-full p-2"
-                    id="pakaian"
-                ></textarea>
-            </p>
-            <p class="rounded-b-md">
-                Tanggal Pemesanan:
-                <span class="font-bold" id="tanggal-pesan"></span>
-            </p>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M15.75 19.5 8.25 12l7.5-7.5"
+                        />
+                    </svg>
+                    Kembali
+                </button>
+                <p class="rounded-t-md">
+                    Nama: <span class="font-bold" id="nama">Budi</span>
+                </p>
+                <p class="flex flex-col h-40 gap-2">
+                    Pakaian:
+                    <textarea
+                        disabled
+                        class="font-bold h-full p-2"
+                        id="pakaian"
+                    ></textarea>
+                </p>
+                <p class="rounded-b-md">
+                    Tanggal Pemesanan:
+                    <span class="font-bold" id="tanggal-pesan"></span>
+                </p>
+            </div>
         </main>
         <script src="./assets/main.js"></script>
         <script>
