@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" href="./assets/favicon.svg" />
+        <link rel="stylesheet" href="./assets/output.css" />
+        <title>LaunderLand</title>
+    </head>
+    <body class="bg-lpink-500 flex flex-col">
+        <header
+            class="flex border-b-2 border-b-lpink-300 shadow-md items-center bg-lpink-700 text-white"
+        >
+            <a href="/" class="flex gap-4 items-center p-4">
+                <img
+                    class="bg-white rounded-full"
+                    src="./assets/favicon.svg"
+                    alt="Logo"
+                />
+                <h1 class="font-bold text-xl">LaunderLand</h1>
+            </a>
+        </header>
+        <main
+            class="overflow-auto bg-[url('./cat.webp')] bg-center p-4 *:p-2 *:bg-lpink-100 *:border-2 *:border-lpink-700 text-lpink-700 *:border-b-0 *:last:border-b-2"
+        >
+            <button
+                class="w-min flex font-semibold mb-4 btn border-b-2!"
+                onclick="window.location.href = '/'"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="size-6"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M15.75 19.5 8.25 12l7.5-7.5"
+                    />
+                </svg>
+                Kembali
+            </button>
+            <p class="rounded-t-md">
+                Nama: <span class="font-bold" id="nama">Budi</span>
+            </p>
+            <p class="flex flex-col h-40 gap-2">
+                Pakaian:
+                <textarea
+                    disabled
+                    class="font-bold h-full p-2"
+                    id="pakaian"
+                ></textarea>
+            </p>
+            <p class="rounded-b-md">
+                Tanggal Pemesanan:
+                <span class="font-bold" id="tanggal-pesan"></span>
+            </p>
+        </main>
+        <script src="./assets/main.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                detailPesanan(urlParams.get("id"));
+            });
+        </script>
+    </body>
+</html>
