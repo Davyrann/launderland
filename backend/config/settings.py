@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'tracking',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -53,9 +54,21 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# Hanya untuk development, di production nanti harus di set ke origin yang benar-benar kita izinkan untuk akses API kita
 CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'config.urls'
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'REST API Launderland',
+    'DESCRIPTION': 'Dokumentasi REST API untuk Sistem Laundry Launderland',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 TEMPLATES = [
     {
@@ -121,3 +134,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Menggunakan custom user model yang sudah kita buat di tracking.models.User
+AUTH_USER_MODEL = 'tracking.User'

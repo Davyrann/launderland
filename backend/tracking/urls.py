@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import cek_status_laundry
+from . import views
+
 
 urlpatterns = [
-    path('api/track/', cek_status_laundry, name='cek_status_laundry'),
+    path('api/track/', views.api_track_pesanan, name='api_track_pesanan'),
+    path('api/pesanan/baru/', views.api_buat_pesanan, name='api_buat_pesanan'),
 ]
