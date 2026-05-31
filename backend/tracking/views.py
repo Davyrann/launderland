@@ -4,11 +4,10 @@ from rest_framework.request import Request
 from rest_framework import status
 from django.db.models import Q
 from .models import Pesanan, Pelanggan, Layanan
-from .serializers import PesananSerializer, CreatePesananSerializer
+from .serializers import PesananSerializer, CreatePesananSerializer, UpdatePesananSerializer
 from typing import Any, Dict
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
-
 
 
 @extend_schema(
@@ -30,7 +29,7 @@ from drf_spectacular.types import OpenApiTypes
 @api_view(['GET'])
 def api_track_pesanan(request: Request) -> Response:
     """Endpoint untuk halaman Beranda (Tracking Pelanggan)"""
-    query: str | None = request.query_params.get('q', None)
+    query = request.query_params.get('q', None)
     
     if not query:
         return Response({"error": "Kata kunci (Resi/No HP) wajib diisi."}, status=status.HTTP_400_BAD_REQUEST)
@@ -51,7 +50,7 @@ def api_track_pesanan(request: Request) -> Response:
     description="Endpoint untuk membuat pesanan baru. Jika pelanggan dengan nomor HP yang sama sudah ada, maka pesanan akan dikaitkan dengan pelanggan tersebut. Jika tidak, maka pelanggan baru akan dibuat.",
     request=CreatePesananSerializer,
     responses={
-        201: OpenApiTypes.OBJECT,
+        201: CreatePesananSerializer,
         400: OpenApiTypes.OBJECT,
     }
 )
@@ -86,8 +85,71 @@ def api_buat_pesanan(request: Request) -> Response:
         
         return Response({
             "message": "Pesanan berhasil dibuat!",
+            "id": pesanan_baru.id, # type: ignore
             "no_resi": pesanan_baru.no_resi,
             "total_harga": pesanan_baru.total_harga
         }, status=status.HTTP_201_CREATED)
         
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@extend_schema(
+    summary="Detail pesanan",
+    description="Endpoint untuk mendapatkan detail lengkap pesanan berdasarkan nomor resi.",
+    
+    responses={
+        200: PesananSerializer,
+        404: OpenApiTypes.OBJECT,
+    }
+)
+@api_view(['GET'])
+def api_detail_pesanan(request: Request, primary_key: str):
+    try:
+        
+        pesanan = Pesanan.objects.get(pk=primary_key)
+    
+    except Pesanan.DoesNotExist:
+        return Response(
+            {"error": "Pesanan tidak ditemukan."},
+            status=status.HTTP_404_NOT_FOUND
+            )
+        
+    # Convert pesanan instance to JSON using PesananSerializer
+    serializer = PesananSerializer(pesanan)
+    return Response(
+        serializer.data,
+        status=status.HTTP_200_OK
+        )
+
+@extend_schema(
+    summary="Update status pesanan",
+    description="Endpoint untuk memperbarui status proses dan pembayaran pesanan berdasarkan nomor resi.",
+    request=UpdatePesananSerializer,
+    responses={
+        200: UpdatePesananSerializer,
+        400: OpenApiTypes.OBJECT,
+        404: OpenApiTypes.OBJECT,
+    }
+)
+@api_view(['PATCH'])
+def update_status_pesanan(request: Request, primary_key: str) -> Response:
+    """Endpoint untuk update status proses dan pembayaran pesanan"""
+    try:
+        pesanan = Pesanan.objects.get(pk=primary_key)
+    except Pesanan.DoesNotExist:
+        return Response(
+            {"error": "Pesanan tidak ditemukan."},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    serializer = UpdatePesananSerializer(data=request.data, partial=True)
+    if serializer.is_valid():
+        status_baru = serializer.validated_data['status_proses'] # type: ignore
+        pesanan.status_proses = status_baru
+        pesanan.save(update_fields=['status_proses'])
+        
+        return Response(
+            {"message": "Status pesanan berhasil diperbarui.",
+            "status_sekarang": pesanan.status_proses,
+            "status_display": pesanan.get_status_proses_display()}, # type: ignore
+            status=status.HTTP_200_OK
+        )
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
