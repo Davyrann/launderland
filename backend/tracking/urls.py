@@ -9,4 +9,6 @@ urlpatterns = [
     path('api/pesanan/<int:primary_key>/update/', views.update_status_pesanan, name='update_status_pesanan'),
     path('api/pesanan/status/', views.api_list_pesanan, name='api_list_pesanan'),
     path('api/layanan/', views.api_daftar_layanan, name='api_daftar_layanan'),
+    path('api/laporan/', views.api_laporan_dasbor, name='api_laporan_dasbor'),
+    path('api/riwayat', views.api_riwayat_pekerjaan, name='api_riwayat_pekerjaan'),
 ]

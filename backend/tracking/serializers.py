@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Pelanggan, Layanan, Pesanan
+from .models import Pelanggan, Layanan, Pesanan, RiwayatPekerjaan
 
 # Serializer berfungsi untuk mengubah data model menjadi format yang bisa dikirim melalui API (biasanya JSON) dan sebaliknya.
 class PelangganSerializer(serializers.ModelSerializer):
@@ -52,3 +52,28 @@ class UpdatePesananSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pesanan
         fields = ['status_proses']
+        
+class RiwayatPekerjaanSerializer(serializers.ModelSerializer):
+    nama_pegawai = serializers.CharField(source='pegawai.username', default='Sistem/Anonim', read_only=True)
+    no_resi = serializers.CharField(source='pesanan.no_resi', read_only=True)
+    role_pegawai = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = RiwayatPekerjaan
+        fields = ['id', 'waktu_eksekusi', 'nama_pegawai','role_pegawai', 'aksi', 'no_resi']
+    
+    def get_role_pegawai(self, obj) -> str:
+        # Jika tidak ada pegawai (misal dihapus atau sistem otomatis)
+        if not obj.pegawai:
+            return "Sistem"
+            
+        # Cek apakah dia Superuser (Owner/Admin utama)
+        if obj.pegawai.is_superuser:
+            return "Owner"
+            
+        # Cek apakah dia masuk ke dalam grup tertentu di Django Admin (misal grup 'Kasir')
+        if obj.pegawai.groups.exists():
+            return obj.pegawai.groups.first().name
+            
+        # Jika bukan superuser dan tidak masuk grup apa-apa, default-nya adalah Kasir biasa
+        return "Kasir"

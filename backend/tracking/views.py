@@ -1,16 +1,17 @@
 from django.db import transaction
+from django.utils import timezone
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status
-from django.db.models import Q
-from .models import Pesanan, Pelanggan, Layanan, RiwayatPekerjaan
-from .serializers import LayananSerializer, PesananSerializer, CreatePesananSerializer, UpdatePesananSerializer
+from django.db.models import Q, Sum, Count
 from typing import Any, Dict
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
-
+from .models import Pesanan, Pelanggan, Layanan, RiwayatPekerjaan
+from .serializers import LayananSerializer, PesananSerializer, CreatePesananSerializer, RiwayatPekerjaanSerializer, UpdatePesananSerializer
+from .utils import kirim_wa_pelanggan
 
 @extend_schema(
     summary="Cek status pesanan",
@@ -158,13 +159,25 @@ def update_status_pesanan(request: Request, primary_key: str) -> Response:
     serializer = UpdatePesananSerializer(data=request.data, partial=True)
     if serializer.is_valid():
         status_baru = serializer.validated_data['status_proses'] # type: ignore
+        
         pesanan.status_proses = status_baru
         pesanan.save(update_fields=['status_proses'])
+        
         RiwayatPekerjaan.objects.create(
             pesanan=pesanan,
             pegawai=request.user,
             aksi=f"Mengubah status menjadi {pesanan.get_status_proses_display()}"  # type: ignore
         )
+        
+        if status_baru == 'selesai':
+            teks_wa = (
+                f"Halo Kak *{pesanan.pelanggan.nama}*, 👋\n\n"
+                f"Kabar gembira! Cucian dengan nomor resi *{pesanan.no_resi}* sudah wangi dan siap diambil.\n"
+                f"Total tagihan: *Rp {pesanan.total_harga}*.\n\n"
+                f"Terima kasih sudah mempercayakan pakaianmu di LaundeLand! ✨"
+            )
+            # Menembak pesan tanpa membuat proses backend berhenti/error jika WA gagal
+            kirim_wa_pelanggan(pesanan.pelanggan.no_hp, teks_wa)
         return Response(
             {"message": "Status pesanan berhasil diperbarui.",
             "status_sekarang": pesanan.status_proses,
@@ -214,4 +227,60 @@ def api_daftar_layanan(request: Request) -> Response:
     """Endpoint untuk mendapatkan daftar layanan yang tersedia"""
     layanan_db = Layanan.objects.all()
     serializer = LayananSerializer(layanan_db, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@extend_schema(
+    summary="Laporan Dasbor Owner",
+    description="Endpoint untuk mendapatkan data laporan dasbor owner, termasuk metrik keuangan, metrik operasional, dan sebaran status pesanan bulan ini.",
+    responses={
+        200: OpenApiTypes.OBJECT,
+    }
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def api_laporan_dasbor(request: Request) -> Response:
+    """Endpoint untuk mendapatkan data laporan dasbor owner"""
+    # Mengambil data pesanan bulan ini
+    sekarang = timezone.now()
+    awal_bulan = sekarang.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    
+    pesanan_bulan_ini = Pesanan.objects.filter(tanggal_masuk__gte=awal_bulan)
+    pendapatan = pesanan_bulan_ini.filter(
+        status_proses__in=['selesai', 'diambil']
+    ).aggregate(total=Sum('total_harga'))['total'] or 0
+    
+    total_berat = pesanan_bulan_ini.aggregate(total=Sum('berat'))['total'] or 0.0
+    
+    sebaran_status = pesanan_bulan_ini.values('status_proses').annotate(jumlah=Count('id'))
+    
+    rincian_status = {item['status_proses']: item['jumlah'] for item in sebaran_status}
+    
+    data_laporan = {
+        "periode": sekarang.strftime('%B %Y'),
+        "metrik_keuangan": {
+            "total_pendapatan": pendapatan,
+        },
+        "metrik_operasional": {
+            "total_cucian_kg": float(total_berat),
+            "total_pesanan_bulan_ini": pesanan_bulan_ini.count(),
+        },
+        "antrean_saat_ini": rincian_status
+    }
+    
+    return Response(data_laporan, status=status.HTTP_200_OK)
+
+@extend_schema(
+    summary="Riwayat Aktivitas Pegawai (Audit Trail)",
+    description="Mengambil daftar log aktivitas pegawai (siapa melakukan apa dan kapan). "
+                "Hanya menampilkan 50 aktivitas terbaru agar response tetap cepat.",
+    responses={200: RiwayatPekerjaanSerializer(many=True)}
+)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def api_riwayat_pekerjaan(request: Request) -> Response:
+    # Kita ambil datanya, urutkan dari yang paling baru (-waktu_eksekusi)
+    # Gunakan [:50] untuk membatasi hanya 50 log terbaru agar server tidak berat
+    riwayat = RiwayatPekerjaan.objects.all().order_by('-waktu_eksekusi')[:50]
+    
+    serializer = RiwayatPekerjaanSerializer(riwayat, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
