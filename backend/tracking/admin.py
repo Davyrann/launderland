@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User, Layanan, Pelanggan, Pesanan, LogAktivitas
+from .models import User, Layanan, Pelanggan, Pesanan, RiwayatPekerjaan
 
 # User custom karena di tambahkan field role, jadi kita buat admin khusus untuk User
 class CustomUserAdmin(UserAdmin):
@@ -36,7 +36,7 @@ class PesananAdmin(admin.ModelAdmin):
     list_filter = ('status_proses', 'status_pembayaran')
     search_fields = ('no_resi', 'pelanggan__nama', 'pelanggan__no_hp')
 
-@admin.register(LogAktivitas)
-class LogAktivitasAdmin(admin.ModelAdmin):
+@admin.register(RiwayatPekerjaan)
+class RiwayatPekerjaanAdmin(admin.ModelAdmin):
     list_display = ('waktu_eksekusi', 'pegawai', 'aksi', 'pesanan')
     list_filter = ('waktu_eksekusi',)

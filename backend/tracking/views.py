@@ -1,9 +1,11 @@
-from rest_framework.decorators import api_view
+from django.db import transaction
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status
 from django.db.models import Q
-from .models import Pesanan, Pelanggan, Layanan
+from .models import Pesanan, Pelanggan, Layanan, RiwayatPekerjaan
 from .serializers import LayananSerializer, PesananSerializer, CreatePesananSerializer, UpdatePesananSerializer
 from typing import Any, Dict
 from drf_spectacular.utils import extend_schema, OpenApiParameter
@@ -50,11 +52,12 @@ def api_track_pesanan(request: Request) -> Response:
     description="Endpoint untuk membuat pesanan baru. Jika pelanggan dengan nomor HP yang sama sudah ada, maka pesanan akan dikaitkan dengan pelanggan tersebut. Jika tidak, maka pelanggan baru akan dibuat.",
     request=CreatePesananSerializer,
     responses={
-        201: CreatePesananSerializer,
+        201: OpenApiTypes.OBJECT,
         400: OpenApiTypes.OBJECT,
     }
 )
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def api_buat_pesanan(request: Request) -> Response:
     """Endpoint untuk halaman Kasir (Input Transaksi Baru)"""
     serializer = CreatePesananSerializer(data=request.data)
@@ -73,22 +76,32 @@ def api_buat_pesanan(request: Request) -> Response:
             layanan = Layanan.objects.get(id=data['layanan_id'])
         except Layanan.DoesNotExist:
             return Response({"error": "Layanan tidak valid."}, status=status.HTTP_400_BAD_REQUEST)
-            
-        # Membuat pesanan baru dengan
-        pesanan_baru = Pesanan(
-            pelanggan=pelanggan,
-            layanan=layanan,
-            berat=data['berat'],
-            metode_pembayaran=data['metode_pembayaran']
-        )
-        pesanan_baru.save() # no_resi & total_harga otomatis terbuat
+        try:
+            with transaction.atomic():
+                # Membuat pesanan baru dengan
+                pesanan_baru = Pesanan(
+                    pelanggan=pelanggan,
+                    layanan=layanan,
+                    berat=data['berat'],
+                    metode_pembayaran=data['metode_pembayaran']
+                )
+                pesanan_baru.save() # no_resi & total_harga otomatis terbuat
+                
+                RiwayatPekerjaan.objects.create(
+                    pesanan=pesanan_baru,
+                    pegawai=request.user,
+                    aksi=f"Membuat pesanan baru ke dalam sistem dengan status '{pesanan_baru.status_proses}' dengan metode pembayaran '{pesanan_baru.metode_pembayaran}'."
+                )
+                
+                return Response({
+                    "message": "Pesanan berhasil dibuat!",
+                    "id": pesanan_baru.id, # type: ignore
+                    "no_resi": pesanan_baru.no_resi,
+                    "total_harga": pesanan_baru.total_harga
+                }, status=status.HTTP_201_CREATED)
         
-        return Response({
-            "message": "Pesanan berhasil dibuat!",
-            "id": pesanan_baru.id, # type: ignore
-            "no_resi": pesanan_baru.no_resi,
-            "total_harga": pesanan_baru.total_harga
-        }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"error": f"Terjadi kesalahan saat membuat pesanan: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -102,6 +115,7 @@ def api_buat_pesanan(request: Request) -> Response:
     }
 )
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def api_detail_pesanan(request: Request, primary_key: str):
     try:
         
@@ -131,6 +145,7 @@ def api_detail_pesanan(request: Request, primary_key: str):
     }
 )
 @api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
 def update_status_pesanan(request: Request, primary_key: str) -> Response:
     """Endpoint untuk update status proses dan pembayaran pesanan"""
     try:
@@ -145,7 +160,11 @@ def update_status_pesanan(request: Request, primary_key: str) -> Response:
         status_baru = serializer.validated_data['status_proses'] # type: ignore
         pesanan.status_proses = status_baru
         pesanan.save(update_fields=['status_proses'])
-        
+        RiwayatPekerjaan.objects.create(
+            pesanan=pesanan,
+            pegawai=request.user,
+            aksi=f"Mengubah status menjadi {pesanan.get_status_proses_display()}"  # type: ignore
+        )
         return Response(
             {"message": "Status pesanan berhasil diperbarui.",
             "status_sekarang": pesanan.status_proses,
@@ -171,6 +190,7 @@ def update_status_pesanan(request: Request, primary_key: str) -> Response:
     }
 )
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def api_list_pesanan(request: Request) -> Response:
     """Endpoint untuk halaman Daftar Pesanan (Admin)"""
     status_filter = request.query_params.get('status', None)

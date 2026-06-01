@@ -11,6 +11,13 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # Cookies berlaku 1 hari
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,6 +63,9 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
 }
 
 # Hanya untuk development, di production nanti harus di set ke origin yang benar-benar kita izinkan untuk akses API kita
@@ -68,6 +78,10 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Dokumentasi REST API untuk Sistem Laundry Launderland',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+    
+    # Bearer token authentication untuk Swagger UI
+    'SECURITY': [{'Bearer': []}],
+    'COMPONENT_SPLIT_REQUEST': True,
 }
 
 TEMPLATES = [

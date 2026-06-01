@@ -115,11 +115,11 @@ class Pesanan(models.Model):
         return f"{self.no_resi} - {self.pelanggan.nama} ({self.status_proses})"
 
 # Log Aktivitas Pegawai
-class LogAktivitas(models.Model):
+class RiwayatPekerjaan(models.Model):
     """
     Mencatat jejak digital setiap kali ada pegawai yang merubah status pesanan laundry.
     """
-    pesanan = models.ForeignKey(Pesanan, on_delete=models.CASCADE, related_name='logs')
+    pesanan = models.ForeignKey(Pesanan, on_delete=models.CASCADE, related_name='riwayat')
     pegawai = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='aktivitas')
     aksi = models.CharField(max_length=255, help_text="Contoh: Mengubah status menjadi Dicuci")
     waktu_eksekusi = models.DateTimeField(auto_now_add=True)
