@@ -4,7 +4,7 @@ from rest_framework.request import Request
 from rest_framework import status
 from django.db.models import Q
 from .models import Pesanan, Pelanggan, Layanan
-from .serializers import PesananSerializer, CreatePesananSerializer, UpdatePesananSerializer
+from .serializers import LayananSerializer, PesananSerializer, CreatePesananSerializer, UpdatePesananSerializer
 from typing import Any, Dict
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
@@ -153,3 +153,45 @@ def update_status_pesanan(request: Request, primary_key: str) -> Response:
             status=status.HTTP_200_OK
         )
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@extend_schema(
+    summary="Daftar pesanan",
+    description="Endpoint untuk mendapatkan daftar semua pesanan. Dapat difilter berdasarkan status proses dengan query parameter 'status'.",
+    parameters=[
+        OpenApiParameter(
+            name='status', 
+            description='Filter pesanan berdasarkan status proses (misal: "masuk", "proses", "selesai", "diambil")', 
+            required=False, 
+            type=OpenApiTypes.STR,
+            enum=['antri', 'proses', 'selesai', 'diambil']
+        ),
+    ],
+    responses={
+        200: PesananSerializer(many=True),
+    }
+)
+@api_view(['GET'])
+def api_list_pesanan(request: Request) -> Response:
+    """Endpoint untuk halaman Daftar Pesanan (Admin)"""
+    status_filter = request.query_params.get('status', None)
+    if status_filter:
+        pesanan_db = Pesanan.objects.filter(status_proses=status_filter).order_by('-tanggal_masuk')
+    else:
+        pesanan_db = Pesanan.objects.all().order_by('-tanggal_masuk')
+    
+    serializer = PesananSerializer(pesanan_db, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@extend_schema(
+    summary="Daftar layanan",
+    description="Endpoint untuk mendapatkan daftar layanan yang tersedia beserta harga per kg.",
+    responses={
+        200: LayananSerializer(many=True),
+    }
+)
+@api_view(['GET'])
+def api_daftar_layanan(request: Request) -> Response:
+    """Endpoint untuk mendapatkan daftar layanan yang tersedia"""
+    layanan_db = Layanan.objects.all()
+    serializer = LayananSerializer(layanan_db, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
