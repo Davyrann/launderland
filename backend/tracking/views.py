@@ -170,11 +170,30 @@ def update_status_pesanan(request: Request, primary_key: str) -> Response:
         )
         
         if status_baru == 'selesai':
+            def format_rupiah(angka) -> str:
+                return f"{angka:,.0f}".replace(",", ".")
+
+            # Ambil waktu saat ini untuk tanggal selesai
+            waktu_selesai = timezone.now().strftime('%d-%m-%m %H:%M')
+            
+            # Hitung harga satuan layanan
+            harga_satuan = pesanan.layanan.harga_per_kg
+            
             teks_wa = (
-                f"Halo Kak *{pesanan.pelanggan.nama}*, 👋\n\n"
-                f"Kabar gembira! Cucian dengan nomor resi *{pesanan.no_resi}* sudah wangi dan siap diambil.\n"
-                f"Total tagihan: *Rp {pesanan.total_harga}*.\n\n"
-                f"Terima kasih sudah mempercayakan pakaianmu di LaundeLand! ✨"
+                f"_*E-NOTA*_\n"
+                f"Launder Land\n"
+                f"Pelanggan: {pesanan.pelanggan.nama}\n\n"
+                f"Order ID: {pesanan.no_resi}\n"
+                f"Tgl Selesai: {waktu_selesai}\n"
+                f"===============================\n"
+                f"Detail pesanan:\n"
+                f"- {float(pesanan.berat)} Kg  {pesanan.layanan.nama_layanan} @ {format_rupiah(harga_satuan)}\n"
+                f"- Total: {format_rupiah(pesanan.total_harga)}\n"
+                f"===============================\n"
+                f"*TOTAL HARGA: {format_rupiah(pesanan.total_harga)}*\n"
+                f"1. Komplain kerusakan/kehilangan maksimal 12 jam sejak pengambilan.\n"
+                f"2. Harus disertai dengan bukti nota digital yang valid.\n\n"
+                f"Terima kasih telah mencuci di LaunderLand! ✨"
             )
             # Menembak pesan tanpa membuat proses backend berhenti/error jika WA gagal
             kirim_wa_pelanggan(pesanan.pelanggan.no_hp, teks_wa)
