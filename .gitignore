@@ -5,3 +5,8 @@ __pycache__
 backend/.python-version
 .venv
 backend/db.sqlite3
+.wwebjs_auth/
+.wwebjs_cache/
+*.db
+.env
+pnpm-workspace.yaml
