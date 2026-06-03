@@ -32,6 +32,7 @@ const initDB = async () => {
             total_harga REAL NOT NULL,
             status_proses TEXT DEFAULT 'antri',
             status_pembayaran TEXT DEFAULT 'belum_lunas',
+            metode_pembayaran TEXT DEFAULT 'tunai',
             tanggal_masuk DATETIME DEFAULT CURRENT_TIMESTAMP,
             pelanggan_id INTEGER,
             layanan_id INTEGER,
