@@ -1,5 +1,5 @@
 const { connectDB } = require('../config/database');
-const { kirimWhatsApp } = require('../utils/whatsapp');
+const { kirimPesanWhatapp } = require('../utils/whatsapp');
 
 const formatRupiah = (angka) => new Intl.NumberFormat('id-ID').format(angka);
 
@@ -48,7 +48,7 @@ const buatPesanan = async (req, res) => {
             `• Tagihan: Rp ${formatRupiah(total_harga)} (${status_bayar.toUpperCase()})\n\n` +
             `Kami akan kabari lagi via WhatsApp jika pakaianmu sudah siap diambil. Terima kasih! ✨`;
         
-        await kirimWhatsApp(no_hp, teksMasuk);
+        await kirimPesanWhatapp(no_hp, teksMasuk);
 
         return res.status(201).json({
             message: "Pesanan berhasil dibuat!",
@@ -98,7 +98,7 @@ const updateStatus = async (req, res) => {
                 `Pakaianmu sudah selesai dicuci dan siap diambil di outlet ruko ruko terdekat! Please datang ya.\n\n` +
                 `Terima kasih telah mempercayakan pakaianmu di ResikHub! 🙏`;
 
-            await kirimWhatsApp(pesanan.no_hp, teksSelesai);
+            await kirimPesanWhatapp(pesanan.no_hp, teksSelesai);
         }
 
         return res.json({ 
@@ -160,4 +160,48 @@ const detailPesanan = async (req, res) => {
     }
 }
 
-module.exports = { buatPesanan, updateStatus, listPesanan, detailPesanan };
+const updateStatusPembayaran = async (req, res) => {
+    try {
+        const { no_resi } = req.params; // Ambil no_resi dari URL
+        const db = await connectDB();
+
+        // Cari pesanan berdasarkan no_resi
+        const pesanan = await db.get(`
+            SELECT p.*, pl.nama, pl.no_hp 
+            FROM pesanan p
+            JOIN pelanggan pl ON p.pelanggan_id = pl.id
+            WHERE p.no_resi = ?
+        `, [no_resi]);
+
+        if (!pesanan) {
+            return res.status(404).json({ message: "Pesanan tidak ditemukan!" });
+        }
+
+        if (pesanan.status_pembayaran === 'lunas') {
+            return res.status(400).json({ message: "Pesanan ini sudah berstatus lunas!" });
+        }
+
+        // Update status menjadi lunas
+        await db.run(`UPDATE pesanan SET status_pembayaran = 'lunas' WHERE no_resi = ?`, [no_resi]);
+
+        // (Opsional) Kirim notifikasi WA pelunasan manual
+        const teksLunas = 
+            `*LaunderLand - PEMBAYARAN LUNAS* 💳\n\n` +
+            `Halo Kak *${pesanan.nama}*,\n` +
+            `Pembayaran tunai/manual untuk nota *${no_resi}* sebesar *Rp ${formatRupiah(pesanan.total_harga)}* telah kami terima.\n\n` +
+            `Terima kasih! 🙏✨`;
+        
+        await kirimPesanWhatapp(pesanan.no_hp, teksLunas);
+
+        return res.json({ 
+            message: "Pembayaran berhasil dicatat sebagai lunas!",
+            data: { no_resi, status_pembayaran: 'lunas' }
+        });
+
+    } catch (error) {
+        console.error("Error pelunasan manual:", error);
+        return res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
+module.exports = { buatPesanan, updateStatus, listPesanan, detailPesanan, updateStatusPembayaran };

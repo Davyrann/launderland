@@ -7,6 +7,7 @@ const { initWA } = require('./utils/whatsapp');
 const pesananRoutes = require('./routes/pesananRoutes');
 const layananRoutes = require('./routes/layananRoutes');
 const whatsappRoutes = require('./routes/whatsappRoutes');
+const laporanRoutes = require('./routes/laporanRoutes');
 
 require('dotenv').config();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/api/pesanan', pesananRoutes);
 app.use('/api/layanan', layananRoutes);
 app.use('/api/whatsapp', whatsappRoutes);
+app.use('/api/laporan', laporanRoutes);
 
 
 app.get('/api', (req, res) => {

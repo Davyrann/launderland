@@ -74,7 +74,6 @@ const kirimPesanWhatapp = async (noHp, pesan, gambar64Base) => {
             console.log(`[WA] Berhasil mengirim TEKS ke ${cleanNumber}`);
         }
         
-        console.log(`[WA] Pesan berhasil dikirim ke ${cleanNumber}`);
         return { success: true };
     
     } catch (error) {
