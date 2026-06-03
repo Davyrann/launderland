@@ -13,7 +13,7 @@ const buatPesanan = async (req, res) => {
         const { no_hp, nama_pelanggan, layanan_id, berat, metode_pembayaran } = req.body;
         const db = await connectDB();
 
-        if (!no_hp || !nama_pelanggan || !layanan_id || !berat) {
+        if (!no_hp || !nama_pelanggan || !layanan_id || !berat || !metode_pembayaran) {
             return res.status(400).json({ message: "Semua field wajib diisi!" });
         }
 
@@ -33,20 +33,20 @@ const buatPesanan = async (req, res) => {
         const pelanggan = await db.get(`SELECT id, nama FROM pelanggan WHERE no_hp = ?`, [no_hp]);
 
         const result = await db.run(`
-            INSERT INTO pesanan (no_resi, berat, total_harga, status_pembayaran, pelanggan_id, layanan_id)
-            VALUES (?, ?, ?, ?, ?, ?)
-        `, [no_resi, berat, total_harga, status_bayar, pelanggan.id, layanan.id]);
+            INSERT INTO pesanan (no_resi, berat, total_harga, status_pembayaran, metode_pembayaran, pelanggan_id, layanan_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `, [no_resi, berat, total_harga, status_bayar, metode_pembayaran, pelanggan.id, layanan.id]);
 
         // TRIGGER WA 1: Pesanan Masuk
         const teksMasuk = 
-            `*RESIKHUB - PESANAN DITERIMA* 📥\n\n` +
+            `*LaunderLand - PESANAN DITERIMA* 📥\n\n` +
             `Halo Kak *${pelanggan.nama}*,\n` +
             `Cucianmu sudah aman bersama kami dengan data berikut:\n\n` +
-            `• No. Resi: *${no_resi}*\n` +
-            `• Layanan: ${layanan.nama_layanan}\n` +
-            `• Berat: ${berat} Kg\n` +
-            `• Tagihan: Rp ${formatRupiah(total_harga)} (${status_bayar.toUpperCase()})\n\n` +
-            `Kami akan kabari lagi via WhatsApp jika pakaianmu sudah siap diambil. Terima kasih! ✨`;
+            `- No. Resi: *${no_resi}*\n` +
+            `- Layanan: ${layanan.nama_layanan}\n` +
+            `- Berat: ${berat} Kg\n` +
+            `- Tagihan: Rp ${formatRupiah(total_harga)} (${status_bayar.toUpperCase()})\n\n` +
+            `> Kami akan kabari lagi via WhatsApp jika pakaianmu sudah siap diambil. Terima kasih! ✨`;
         
         await kirimPesanWhatapp(no_hp, teksMasuk);
 
@@ -87,16 +87,16 @@ const updateStatus = async (req, res) => {
         if (status_proses === 'selesai') {
             const statusNota = pesanan.status_pembayaran === 'lunas' ? 'LUNAS (Sudah Dibayar)' : 'BELUM LUNAS (Bayar saat ambil)';
             const teksSelesai = 
-                `*E-NOTA DIGITAL RESIKHUB* ✨\n` +
+                `*LaunderLand - E-NOTA* ✨\n` +
                 `Status: *${statusNota}*\n` +
                 `===============================\n` +
-                `Detail pesanan:\n\n` +
-                `✅ ${pesanan.berat} Kg  ${pesanan.nama_layanan} @ Rp ${formatRupiah(pesanan.harga_layanan)}\n` +
-                `Total: Rp ${formatRupiah(pesanan.total_harga)}\n` +
+                `- Detail pesanan:\n\n` +
+                `- ✅ ${pesanan.berat} Kg  ${pesanan.nama_layanan} @ Rp ${formatRupiah(pesanan.harga_layanan)}\n` +
+                `- Total: Rp ${formatRupiah(pesanan.total_harga)}\n` +
                 `===============================\n` +
                 `*TOTAL TAGIHAN: Rp ${formatRupiah(pesanan.total_harga)}*\n\n` +
                 `Pakaianmu sudah selesai dicuci dan siap diambil di outlet ruko ruko terdekat! Please datang ya.\n\n` +
-                `Terima kasih telah mempercayakan pakaianmu di ResikHub! 🙏`;
+                `> Terima kasih telah mempercayakan pakaianmu di LaunderLand! 🙏`;
 
             await kirimPesanWhatapp(pesanan.no_hp, teksSelesai);
         }
