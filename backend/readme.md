@@ -1,55 +1,98 @@
-# Launderland Backend
-Repositori backend dari "Launderland" untuk "Sistem Informasi Laundry" Dibangun menggunakan arsitektur REST API.
-## Tech yang digunakan
-* **Framework Utama:** Python 3 & Django
-* **API Framework:** Django REST Framework (DRF)
-* **Dokumentasi API:** drf-spectacular (Swagger UI)
-* **Database:** SQLite (lokal)
----
-## Daftar Fitur & Endpoint API
-### Dokumentasi & Skema
-* `GET /api/docs/` : Halaman interaktif Swagger UI untuk melihat dan mengetes seluruh API.
-* `GET /api/schema/` : File skema mentah (format YAML/JSON) untuk kebutuhan integrasi sistem.
-### Area Publik (Pelanggan)
-* `GET /api/track/?q={no_resi/no_hp}` : Melacak status pesanan pelanggan. Tidak memerlukan autentikasi.
-### 3. Area Kasir (Dashboard)
-* `POST /api/pesanan/baru/` : Menambahkan data cucian baru. Sistem akan otomatis membuatkan `no_resi` dan menghitung `total_harga` berdasarkan berat dan layanan.
-*(Semua fitur masih dalam tahap pengembangan ekspektasi nya tolong di kurangi)*
----
-# Bagaimana cara menjalankan
-> Karena database `db.sqlite3` dan folder virtual environment (`env`) tidak diikutkan ke dalam repositori demi keamanan
+# LaunderLand Backend
 
-ikuti langkah berikut untuk menyalakan server dari nol:
-### Langkah 1: Clone repo
+Backend resmi untuk Sistem Informasi Laundry LaunderLand. Proyek ini dibangun dengan Node.js, Express, SQLite, dan dokumentasi API Swagger.
+
+## Tech Stack
+
+- **Runtime:** Node.js
+- **Package Manager:** pnpm
+- **Framework:** Express.js
+- **Database:** SQLite (`LL.db`)
+- **Dokumentasi API:** Swagger UI (`swagger-jsdoc` + `swagger-ui-express`)
+- **Integrasi tambahan:** WhatsApp gateway dan Xendit
+
+## Fitur Utama
+
+- CRUD layanan laundry
+- Pembuatan pesanan baru dengan nomor resi otomatis
+- Daftar dan detail pesanan
+- Rekap laporan pendapatan
+- Status dan pengiriman pesan WhatsApp
+- Dokumentasi API interaktif
+
+## Endpoint API
+
+### Umum
+
+- `GET /api` - Cek server aktif
+- `GET /api-docs` - Swagger UI
+
+### Pesanan
+
+- `POST /api/pesanan` - Membuat pesanan baru
+- `GET /api/pesanan` - Daftar pesanan
+- `GET /api/pesanan/:id` - Detail pesanan
+- `PUT /api/pesanan/:id/status` - Ubah status proses pesanan
+- `PUT /api/pesanan/:id/pembayaran` - Ubah status pembayaran
+
+### Layanan
+
+- `GET /api/layanan` - Daftar layanan
+- `POST /api/layanan` - Tambah layanan
+- `PUT /api/layanan/:id` - Ubah layanan
+- `DELETE /api/layanan/:id` - Hapus layanan
+
+### Laporan
+
+- `GET /api/laporan/pendapatan?start=YYYY-MM-DD&end=YYYY-MM-DD` - Rekap pendapatan
+
+### WhatsApp
+
+- `GET /api/whatsapp/status` - Cek status gateway WhatsApp
+- `POST /api/whatsapp/kirim` - Kirim pesan WhatsApp manual
+
+## Menjalankan Project
+
+### 1. Clone repository
+
 ```bash
 git clone https://github.com/maroisa/launderland
 cd launderland/backend
 ```
-### Langkah 2: Buat & Aktifkan Virtual Environment
+
+### 2. Install dependencies dengan pnpm
+
 ```bash
-# Buat virtual environment bernama .venv
-python -m venv .venv
-# Linux
-source env/bin/activate
-# Windows
-.\env\Scripts\activate
+pnpm install
 ```
 
-### Langkah 3: Install requirements
+### 3. Jalankan server development
+
 ```bash
-pip install -r requirements.txt
+pnpm dev
 ```
-### Langkah 4: Buat database
-```bash
-python manage.py migrate
+
+Secara default server akan berjalan di `http://localhost:3000`.
+
+## Catatan Database
+
+- File database SQLite dibuat otomatis sebagai `LL.db` saat server pertama kali dijalankan.
+- Jika tabel masih kosong, sistem akan menambahkan beberapa layanan default.
+
+## Konfigurasi
+
+Variabel environment yang dikenali saat ini hanya:
+
+- `PORT` - mengubah port server, default `3000`
+
+Jika tidak diisi, server tetap bisa berjalan dengan pengaturan bawaan.
+
+## Dokumentasi API
+
+Setelah server aktif, buka:
+
+```text
+http://localhost:3000/api-docs
 ```
-> *(Opsional: Jika ingin membuat akun admin baru untuk mengakses Django Admin)*
-```bash
-python manage.py createsuperuser
-```
-### Langkah 5: Runserver
-```bash
-python manage.py runserver
-```
-Aplikasi backend sekarang berjalan di http://127.0.0.1:8000/.
-Silakan buka http://127.0.0.1:8000/api/docs/ di browser untuk mulai mengetes API!
+
+Di sana kamu bisa mencoba endpoint API secara langsung.
