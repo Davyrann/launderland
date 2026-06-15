@@ -22,7 +22,8 @@ const buatPesanan = async (req, res) => {
 
         const total_harga = Number(berat) * layanan.harga;
         const no_resi = `RESI-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-        const status_bayar = metode_pembayaran === 'Tunai' ? 'lunas' : 'belum_lunas';
+        const status_bayar = metode_pembayaran === 'TUNAI' ? 'belum lunas' : 'lunas';
+         console.log(`status pembayaran: ${metode_pembayaran}, berat: ${berat}, layanan_id: ${status_bayar}`);
 
         // RAW SQL Upsert Pelanggan (Ganti nama jika nomor HP sudah terdaftar)
         await db.run(`
