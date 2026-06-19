@@ -2,50 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href="./assets/favicon.svg" />
-        <link rel="stylesheet" href="./assets/output.css" />
         <title>LaunderLand</title>
     </head>
-    <body class="bg-lpink-500 flex flex-col">
-        <header
-            class="flex border-b-2 border-b-lpink-300 shadow-md items-center bg-lpink-700 text-white"
-        >
-            <a href="/" class="flex gap-4 items-center p-4">
-                <img
-                    class="bg-white rounded-full"
-                    src="./assets/favicon.svg"
-                    alt="Logo"
-                />
-                <h1 class="font-bold text-xl">LaunderLand</h1>
-            </a>
-        </header>
-        <main
-            class="overflow-auto bg-[url('./cat.webp')] bg-center text-lpink-700"
-        >
-            <div class="p-4 flex flex-col gap-4 max-w-2xl mx-auto">
-                <button
-                    onclick="window.location.href = '/buat.html'"
-                    class="btn"
-                >
-                    Tambah Pesanan
-                </button>
-                <div class="shadow-lg">
-                    <p
-                        class="bg-lpink-700 rounded-t-md font-bold p-2 text-center text-lpink-100"
-                    >
-                        Daftar Pesanan
-                    </p>
-                    <div
-                        id="listPesanan"
-                        class="flex flex-col *:bg-lpink-100 *:last:rounded-b-md *:p-2 *:border-2 *:border-t-0 *:border-t-lpink-700/50 *:flex *:items-center *:gap-2"
-                    ></div>
-                </div>
-            </div>
-        </main>
-        <script src="./assets/main.js"></script>
-        <script>
-            addEventListener("DOMContentLoaded", refresh);
-        </script>
+    <body>
+        <div id="root"></div>
+        <script type="module" src="/src/index.jsx"></script>
     </body>
 </html>

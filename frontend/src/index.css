@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+    themes: corporate --default;
+}
+
+@layer base {
+    html,
+    body,
+    #root,
+    main {
+        @apply h-full w-full;
+    }
+}

@@ -1,24 +1,22 @@
 {
   "name": "launderland",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "dev": "tailwindcss -i ./assets/input.css -o ./assets/output.css --watch --minify"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.0.9",
-      "onFail": "download"
-    }
-  },
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "@tailwindcss/cli": "^4.3.0",
-    "tailwindcss": "^4.3.0"
+    "@solidjs/router": "^0.16.1",
+    "@tailwindcss/vite": "^4.3.1",
+    "daisyui": "^5.5.23",
+    "solid-js": "^1.9.12",
+    "tailwindcss": "^4.3.1"
+  },
+  "devDependencies": {
+    "vite": "^8.0.12",
+    "vite-plugin-solid": "^2.11.12"
   }
 }
