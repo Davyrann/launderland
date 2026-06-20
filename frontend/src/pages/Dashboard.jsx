@@ -11,6 +11,13 @@ export default function Dashboard() {
         console.log(pesanan == true);
         const [res, err] = await get("pesanan");
 
+        if (err) {
+            alert("Ada kendala di server!");
+            setPesanan([]);
+            setIsLoading(false);
+            return;
+        }
+
         setPesanan(res.data);
 
         setIsLoading(false);
