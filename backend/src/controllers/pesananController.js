@@ -70,6 +70,13 @@ const updateStatus = async (req, res) => {
     try {
         const { id } = req.params;
         const { status_proses } = req.body; // antri, proses, selesai, diambil
+        if (!status_proses) {
+            return res.status(400).json({ message: "Field 'status_proses' wajib diisi!" });
+        }
+        const validStatus = ['antri', 'proses', 'selesai', 'diambil'];
+        if (!validStatus.includes(status_proses)) {
+            return res.status(400).json({ message: `Status proses tidak valid! Pilih salah satu: ${validStatus.join(', ')}` });
+        }
         const db = await connectDB();
 
         const pesanan = await db.get(`
@@ -139,6 +146,9 @@ const listPesanan = async (req, res) => {
 const detailPesanan = async (req, res) => {
     try {
         const { id } = req.params;
+        if (!id) {
+            return res.status(400).json({ message: "Parameter 'id' wajib diisi!" });
+        }
         const db = await connectDB();
         const data = await db.get(`
             SELECT p.*, pl.nama as nama_pelanggan, pl.no_hp, l.nama_layanan, l.harga as harga_layanan
@@ -164,6 +174,9 @@ const detailPesanan = async (req, res) => {
 const updateStatusPembayaran = async (req, res) => {
     try {
         const { no_resi } = req.params; // Ambil no_resi dari URL
+        if (!no_resi) {
+            return res.status(400).json({ message: "Parameter 'no_resi' wajib diisi!" });
+        }
         const db = await connectDB();
 
         // Cari pesanan berdasarkan no_resi

@@ -15,6 +15,13 @@ const buatLayanan = async (req, res) => {
     try {
         const db = await connectDB();
         const { nama_layanan, harga } = req.body;
+        
+        if (!nama_layanan) {
+            return res.status(400).json({ error: 'Nama layanan harus diisi' });
+        } else if (harga === undefined || isNaN(harga) || harga < 0) {
+            return res.status(400).json({ error: 'Harga harus berupa angka positif' });
+        }
+        
         const result = await db.run('INSERT INTO layanan (nama_layanan, harga) VALUES (?, ?)', [nama_layanan, harga]);
         res.status(201).json({ id: result.lastID, nama_layanan, harga });
     } catch (error) {
@@ -28,6 +35,11 @@ const editLayanan = async (req, res) => {
         const db = await connectDB();
         const { id } = req.params;
         const { nama_layanan, harga } = req.body;
+        if (!nama_layanan) {
+            return res.status(400).json({ error: 'Nama layanan harus diisi' });
+        } else if (harga === undefined || isNaN(harga) || harga < 0) {
+            return res.status(400).json({ error: 'Harga harus berupa angka positif' });
+        }
         await db.run('UPDATE layanan SET nama_layanan = ?, harga = ? WHERE id = ?', [nama_layanan, harga, id]);
         res.json({ message: 'Layanan updated successfully' });
     } catch (error) {
