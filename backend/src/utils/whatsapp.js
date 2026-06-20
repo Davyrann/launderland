@@ -5,13 +5,25 @@ const qrCodeTerminal = require('qrcode-terminal')
 let waStatus = 'disconnected'
 let waQrBase64 = null
 
+const isDocker = !!process.env.PUPPETEER_EXECUTABLE_PATH
+
+const pupetterConfig = isDocker ? {
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+        args: [
+            '--no-sandbox',                // Disables Chromium sandbox
+            '--disable-setuid-sandbox',    // Prevents issues with user namespaces
+            '--disable-dev-shm-usage',    // Fixes the crash caused by small /dev/shm
+            '--disable-gpu',
+        ]
+} : {
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+}
+
 // Client Init
 const client = new Client({
     authStrategy: new LocalAuth(),
-    puppeteer: {
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'] // Mencegah error di beberapa OS
-    }
+    puppeteer: pupetterConfig
 });
 
 // Event: QR Code Diminta

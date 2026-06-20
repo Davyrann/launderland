@@ -22,7 +22,8 @@ const buatPesanan = async (req, res) => {
 
         const total_harga = Number(berat) * layanan.harga;
         const no_resi = `RESI-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-        const status_bayar = metode_pembayaran === 'Tunai' ? 'lunas' : 'belum_lunas';
+        const status_bayar = metode_pembayaran === 'TUNAI' ? 'belum lunas' : 'lunas';
+         console.log(`status pembayaran: ${metode_pembayaran}, berat: ${berat}, layanan_id: ${status_bayar}`);
 
         // RAW SQL Upsert Pelanggan (Ganti nama jika nomor HP sudah terdaftar)
         await db.run(`
@@ -69,6 +70,13 @@ const updateStatus = async (req, res) => {
     try {
         const { id } = req.params;
         const { status_proses } = req.body; // antri, proses, selesai, diambil
+        if (!status_proses) {
+            return res.status(400).json({ message: "Field 'status_proses' wajib diisi!" });
+        }
+        const validStatus = ['antri', 'proses', 'selesai', 'diambil'];
+        if (!validStatus.includes(status_proses)) {
+            return res.status(400).json({ message: `Status proses tidak valid! Pilih salah satu: ${validStatus.join(', ')}` });
+        }
         const db = await connectDB();
 
         const pesanan = await db.get(`
@@ -138,6 +146,9 @@ const listPesanan = async (req, res) => {
 const detailPesanan = async (req, res) => {
     try {
         const { id } = req.params;
+        if (!id) {
+            return res.status(400).json({ message: "Parameter 'id' wajib diisi!" });
+        }
         const db = await connectDB();
         const data = await db.get(`
             SELECT p.*, pl.nama as nama_pelanggan, pl.no_hp, l.nama_layanan, l.harga as harga_layanan
@@ -163,6 +174,9 @@ const detailPesanan = async (req, res) => {
 const updateStatusPembayaran = async (req, res) => {
     try {
         const { no_resi } = req.params; // Ambil no_resi dari URL
+        if (!no_resi) {
+            return res.status(400).json({ message: "Parameter 'no_resi' wajib diisi!" });
+        }
         const db = await connectDB();
 
         // Cari pesanan berdasarkan no_resi
