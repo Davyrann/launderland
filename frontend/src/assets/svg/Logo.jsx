@@ -1,0 +1,55 @@
+export default function Logo(props) {
+    return (
+        <svg
+            class={props.class}
+            viewBox="0 0 8.4666668 8.4666668"
+            version="1.1"
+            id="svg1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:svg="http://www.w3.org/2000/svg"
+        >
+            <defs id="defs1" />
+            <g id="layer1">
+                <path
+                    id="rect2"
+                    style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0.663084;stroke-linecap:round;stroke-dasharray:none"
+                    d="M 2.9832804,0.73328857 V 4.7335612 h 0.999939 V 0.73328857 Z M 1.4831136,2.2334554 V 6.2332113 H 2.4835693 V 2.2334554 Z m 1.5001668,2.9998169 v 0.999939 H 6.9835531 V 5.2332723 Z M 1.4831136,6.7334391 v 0.999939 h 4.0002726 v -0.999939 z"
+                />
+                <rect
+                    style="fill:#bb007a;stroke:none;stroke-width:0.663084;stroke-linecap:round;stroke-dasharray:none;fill-opacity:1"
+                    id="rect1"
+                    width="1"
+                    height="4"
+                    x="1.4833333"
+                    y="2.2333331"
+                />
+                <rect
+                    style="fill:#bb007a;stroke:none;stroke-width:0.663084;stroke-linecap:round;stroke-dasharray:none;fill-opacity:1"
+                    id="rect1-6"
+                    width="1"
+                    height="4"
+                    x="-7.7333331"
+                    y="1.4833333"
+                    transform="rotate(-90)"
+                />
+                <rect
+                    style="fill:#ff0078;stroke:none;stroke-width:0.663084;stroke-linecap:round;stroke-dasharray:none;fill-opacity:1"
+                    id="rect5"
+                    width="1"
+                    height="4"
+                    x="2.9833333"
+                    y="0.73333341"
+                />
+                <rect
+                    style="fill:#ff0078;stroke:none;stroke-width:0.663084;stroke-linecap:round;stroke-dasharray:none;fill-opacity:1"
+                    id="rect6"
+                    width="1"
+                    height="4"
+                    x="-6.2333331"
+                    y="2.9833333"
+                    transform="rotate(-90)"
+                />
+            </g>
+        </svg>
+    );
+}

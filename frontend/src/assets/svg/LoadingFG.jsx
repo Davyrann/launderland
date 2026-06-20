@@ -1,13 +1,12 @@
-export default function LoadingFG() {
+export default function LoadingFG(props) {
     return (
         <svg
-            width="32"
-            height="32"
+            class={props.class}
             viewBox="0 0 8.4666668 8.4666668"
             version="1.1"
-            id="svg1"
-            sodipodi:docname="loading.svg"
+            sodipodi:docname="LoadingFG.svg"
             inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+            id="svg1"
             xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
             xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
             xmlns="http://www.w3.org/2000/svg"
@@ -24,8 +23,8 @@ export default function LoadingFG() {
                 inkscape:deskcolor="#d1d1d1"
                 inkscape:document-units="mm"
                 inkscape:zoom="15.667956"
-                inkscape:cx="21.062096"
-                inkscape:cy="13.818011"
+                inkscape:cx="21.030184"
+                inkscape:cy="13.818012"
                 inkscape:window-width="1920"
                 inkscape:window-height="1024"
                 inkscape:window-x="0"
@@ -36,8 +35,8 @@ export default function LoadingFG() {
             <defs id="defs1" />
             <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1">
                 <path
-                    id="path6"
-                    style="fill:#000000;stroke-width:0.1;stroke:#000000;opacity:1;stroke-dasharray:none"
+                    id="path1"
+                    style="fill:#000000;stroke-width:0.5;stroke:#000000;stroke-dasharray:none"
                     d="M 4.2333333 0.42529704 A 3.8079505 3.8079505 0 0 0 0.42529704 4.2333333 A 3.8079505 3.8079505 0 0 0 4.2333333 8.0413696 A 3.8079505 3.8079505 0 0 0 8.0413696 4.2333333 A 3.8079505 3.8079505 0 0 0 4.2333333 0.42529704 z M 4.2333333 1.1591024 A 3.0743086 3.0743086 0 0 1 4.6343424 1.1854574 A 3.0743086 3.0743086 0 0 1 4.6348592 1.1854574 A 3.0743086 3.0743086 0 0 1 5.7701904 1.5709635 A 3.0743086 3.0743086 0 0 1 5.7707072 1.5709635 A 3.0743086 3.0743086 0 0 1 6.1045369 1.7942057 A 3.0743086 3.0743086 0 0 1 6.1050537 1.7942057 A 3.0743086 3.0743086 0 0 1 7.3075643 4.2333333 A 3.0743086 3.0743086 0 0 1 4.6343424 7.2812093 A 3.0743086 3.0743086 0 0 1 4.2333333 7.3075643 A 3.0743086 3.0743086 0 0 1 3.8323242 7.2812093 A 3.0743086 3.0743086 0 0 1 3.8318075 7.2812093 A 3.0743086 3.0743086 0 0 1 2.6964762 6.8957031 A 3.0743086 3.0743086 0 0 1 2.6959595 6.8957031 A 3.0743086 3.0743086 0 0 1 2.3621297 6.6724609 A 3.0743086 3.0743086 0 0 1 2.361613 6.6724609 A 3.0743086 3.0743086 0 0 1 1.7942057 6.1045369 A 3.0743086 3.0743086 0 0 1 1.5709635 5.7707072 A 3.0743086 3.0743086 0 0 1 1.5709635 5.7701904 A 3.0743086 3.0743086 0 0 1 1.3931966 5.4100057 A 3.0743086 3.0743086 0 0 1 1.1854574 4.6343424 A 3.0743086 3.0743086 0 0 1 1.1591024 4.2333333 A 3.0743086 3.0743086 0 0 1 1.1854574 3.8323242 A 3.0743086 3.0743086 0 0 1 1.1854574 3.8318075 A 3.0743086 3.0743086 0 0 1 1.5709635 2.6964762 A 3.0743086 3.0743086 0 0 1 1.5709635 2.6959595 A 3.0743086 3.0743086 0 0 1 1.7942057 2.3621297 A 3.0743086 3.0743086 0 0 1 1.7942057 2.361613 A 3.0743086 3.0743086 0 0 1 4.2333333 1.1591024 z "
                 />
                 <path
