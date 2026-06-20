@@ -5,7 +5,7 @@ import Logo from "../assets/svg/Logo.jsx";
 
 export default function Layout({ children }) {
     const NAV = [
-        { href: "/", name: "Dashboard" },
+        { href: "/dashboard", name: "Dashboard" },
         { href: "/layanan", name: "Layanan" },
         { href: "/laporan", name: "Laporan" },
     ];
@@ -18,7 +18,7 @@ export default function Layout({ children }) {
                         <div
                             tabindex="0"
                             role="button"
-                            class="btn btn-ghost lg:hidden"
+                            class="btn btn-ghost lg:hidden px-2"
                         >
                             <Bars3 />
                         </div>
@@ -37,7 +37,7 @@ export default function Layout({ children }) {
                     </div>
                     <A
                         href="/"
-                        class="btn btn-ghost hover:bg-pink-500 hover:border-pink-500 hover:text-white text-xl"
+                        class="btn btn-ghost hover:bg-pink-500 hover:border-pink-500 hover:text-white text-xl font-bold px-0"
                     >
                         <Logo class="h-full p-1" />
                         LaunderLand
@@ -48,7 +48,11 @@ export default function Layout({ children }) {
                         <For each={NAV}>
                             {(item, index) => (
                                 <li>
-                                    <A class="font-semibold" href={item.href}>
+                                    <A
+                                        class="font-semibold"
+                                        activeClass="bg-pink-800"
+                                        href={item.href}
+                                    >
                                         {item.name}
                                     </A>
                                 </li>
