@@ -38,7 +38,7 @@ export default function BuatLayanan() {
                         />
 
                         <button type="submit" class="btn btn-primary mt-4">
-                            Buat Pesanan
+                            Buat Layanan
                         </button>
                     </fieldset>
                 </form>
