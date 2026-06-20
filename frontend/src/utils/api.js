@@ -14,3 +14,19 @@ export async function get(path) {
 
     return [json, null];
 }
+
+export async function post(path, data) {
+    const [res, err] = await fetch(API_URL + path, {
+        method: "POST",
+        body: data,
+    })
+        .then((response) => [response, null])
+        .catch((error) => [null, error]);
+
+    if (err) return [null, err];
+
+    const json = await res.json();
+    if (!res.ok) return [null, new Error(json.message)];
+
+    return [json, null];
+}

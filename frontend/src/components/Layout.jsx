@@ -37,7 +37,7 @@ export default function Layout({ children }) {
                     </div>
                     <A
                         href="/"
-                        class="btn btn-ghost hover:bg-pink-500 hover:border-pink-500 hover:text-white text-xl font-bold px-0"
+                        class="btn btn-ghost hover:bg-pink-500 hover:border-pink-500 hover:text-white text-xl font-bold px-1"
                     >
                         <Logo class="h-full p-1" />
                         LaunderLand
