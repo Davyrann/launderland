@@ -29,7 +29,7 @@ export default function Dashboard() {
             <div class="max-w-4xl mx-auto flex flex-col h-full">
                 <div class="my-4 mb-8 flex justify-between">
                     <h2 class="font-bold text-2xl">Dashboard</h2>
-                    <A href="/buat-pesanan" class="btn btn-lprimary">
+                    <A href="/pesanan/buat" class="btn btn-lprimary">
                         <Plus class="size-5" />
                         Pesanan Baru
                     </A>
@@ -43,7 +43,7 @@ export default function Dashboard() {
                                 <p class="text-2xl italic">
                                     Tidak ada pesanan.
                                 </p>
-                                <A href="/buat-pesanan" class="btn btn-primary">
+                                <A href="/pesanan/buat" class="btn btn-primary">
                                     Buat pesanan baru
                                 </A>
                             </div>
@@ -69,9 +69,13 @@ export default function Dashboard() {
                                                 <td>{item.status_proses}</td>
                                                 <td>{item.nama_layanan}</td>
                                                 <td>
-                                                    <button class="btn btn-primary w-full">
+                                                    <A
+                                                        href="/pesanan/detail"
+                                                        state={item}
+                                                        class="btn btn-primary w-full"
+                                                    >
                                                         Detail
-                                                    </button>
+                                                    </A>
                                                 </td>
                                             </tr>
                                         )}
