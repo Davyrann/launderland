@@ -1,16 +1,17 @@
-import { useNavigate } from "@solidjs/router";
-import { post } from "../utils/api";
+import { useLocation, useNavigate } from "@solidjs/router";
+import { put } from "../utils/api.js";
 
 import LayananForm from "../components/LayananForm.jsx";
+import { createSignal, onMount } from "solid-js";
 
-export default function BuatLayanan() {
+export default function EditLayanan() {
     const navigate = useNavigate();
+    const location = useLocation();
 
     async function handleForm(event) {
         event.preventDefault();
         let formData = new FormData(event.target);
-
-        const [res, err] = await post("layanan", formData);
+        const [res, err] = await put("layanan/" + location.state.id, formData);
         if (err) {
             alert(err);
             return;
@@ -22,7 +23,7 @@ export default function BuatLayanan() {
     return (
         <main class="h-full flex flex-col justify-center items-center">
             <div>
-                <LayananForm handler={handleForm} />
+                <LayananForm handler={handleForm} data={location.state} />
             </div>
         </main>
     );

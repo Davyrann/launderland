@@ -55,10 +55,14 @@ export default function Layanan() {
                                         </p>
                                     </div>
                                     <p>{item.deskripsi}</p>
-                                    <button class="btn btn-primary w-full mt-2">
+                                    <A
+                                        href="/edit-layanan"
+                                        state={item}
+                                        class="btn btn-primary w-full mt-2"
+                                    >
                                         <Pencil class="size-6" />
                                         Edit
-                                    </button>
+                                    </A>
                                 </div>
                             )}
                         </For>

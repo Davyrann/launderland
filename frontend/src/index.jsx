@@ -9,6 +9,7 @@ import Layanan from "./pages/Layanan";
 import Layout from "./components/Layout";
 import BuatPesanan from "./pages/BuatPesanan";
 import BuatLayanan from "./pages/BuatLayanan";
+import EditLayanan from "./pages/EditLayanan";
 import NotFound from "./pages/NotFound";
 
 const root = document.getElementById("root");
@@ -22,6 +23,7 @@ render(
             <Route path="/layanan" component={Layanan} />
             <Route path="/buat-pesanan" component={BuatPesanan} />
             <Route path="/buat-layanan" component={BuatLayanan} />
+            <Route path="/edit-layanan" component={EditLayanan} />
             <Route path="*404" component={NotFound} />
         </Router>
     ),
