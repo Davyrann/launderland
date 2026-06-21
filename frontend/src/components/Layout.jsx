@@ -12,7 +12,7 @@ export default function Layout({ children }) {
 
     return (
         <>
-            <header class="navbar bg-pink-600 shadow-md text-white">
+            <header class="navbar bg-lprimary-600 shadow-md text-white">
                 <div class="navbar-start">
                     <div class="dropdown">
                         <div
@@ -24,7 +24,7 @@ export default function Layout({ children }) {
                         </div>
                         <ul
                             tabindex="-1"
-                            class="menu dropdown-content bg-pink-600 rounded-box z-1 mt-4 w-52 p-2 font-semibold"
+                            class="menu dropdown-content bg-lprimary-600 rounded-box z-1 mt-4 w-52 p-2 font-semibold"
                         >
                             <For each={NAV}>
                                 {(item, index) => (
@@ -37,7 +37,7 @@ export default function Layout({ children }) {
                     </div>
                     <A
                         href="/"
-                        class="btn btn-ghost hover:bg-pink-500 hover:border-pink-500 hover:text-white text-xl font-bold px-1"
+                        class="btn btn-ghost hover:bg-lprimary-500 hover:border-lprimary-500 hover:text-white text-xl font-bold px-1"
                     >
                         <Logo class="h-full p-1" />
                         LaunderLand
@@ -50,7 +50,7 @@ export default function Layout({ children }) {
                                 <li>
                                     <A
                                         class="font-semibold"
-                                        activeClass="bg-pink-800"
+                                        activeClass="bg-lprimary-800"
                                         href={item.href}
                                     >
                                         {item.name}

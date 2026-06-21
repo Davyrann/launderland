@@ -6,6 +6,10 @@
 
 @theme {
     --font-sans: "Inter", sans-serif;
+    --color-lprimary-500: var(--color-pink-500);
+    --color-lprimary-600: var(--color-pink-600);
+    --color-lprimary-700: var(--color-pink-700);
+    --color-lprimary-800: var(--color-pink-800);
 }
 
 @layer base {
@@ -22,4 +26,8 @@
     #root {
         @apply flex flex-col;
     }
+}
+
+@utility btn-lprimary {
+    @apply btn-primary bg-lprimary-600 border-lprimary-600 hover:bg-lprimary-700 hover:border-lprimary-700;
 }

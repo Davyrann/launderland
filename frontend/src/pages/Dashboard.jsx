@@ -3,6 +3,8 @@ import Loading from "../components/Loading.jsx";
 import { get } from "../utils/api.js";
 import { A } from "@solidjs/router";
 
+import Plus from "../assets/svg/Plus.jsx";
+
 export default function Dashboard() {
     const [pesanan, setPesanan] = createSignal();
     const [isLoading, setIsLoading] = createSignal(true);
@@ -24,20 +26,17 @@ export default function Dashboard() {
     });
 
     return (
-        <main class="p-4">
+        <main class="p-4 relative">
             <div class="max-w-4xl mx-auto flex flex-col h-full">
-                <h2 class="font-semibold text-2xl mb-4">
-                    Selamat datang di LaunderLand!
-                </h2>
+                <div class="my-4 mb-8 flex justify-between">
+                    <h2 class="font-bold text-2xl">Dashboard</h2>
+                    <A href="/buat-pesanan" class="btn btn-lprimary">
+                        <Plus class="size-5" />
+                        Pesanan Baru
+                    </A>
+                </div>
 
-                <Show
-                    when={!isLoading()}
-                    fallback={
-                        <div class="flex justify-center items-center grow">
-                            <Loading class="size-1/2 md:size-1/4" />
-                        </div>
-                    }
-                >
+                <Show when={!isLoading()} fallback={<Loading />}>
                     <Show
                         when={pesanan().length}
                         fallback={
@@ -53,7 +52,7 @@ export default function Dashboard() {
                     >
                         <div class="overflow-x-auto">
                             <table class="table table-zebra border-2 border-black/20 shadow-md bg-white">
-                                <thead class="bg-pink-600 text-white">
+                                <thead class="bg-lprimary-600 text-white">
                                     <tr>
                                         <th>Resi</th>
                                         <th>Pelanggan</th>
