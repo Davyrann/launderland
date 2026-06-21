@@ -16,6 +16,7 @@ const initDB = async () => {
         CREATE TABLE IF NOT EXISTS layanan (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nama_layanan TEXT NOT NULL,
+            deskripsi TEXT,
             harga REAL NOT NULL
         );
 
@@ -44,10 +45,10 @@ const initDB = async () => {
     const layananCount = await db.get(`SELECT COUNT(*) as count FROM layanan`);
     if (layananCount.count === 0) {
         await db.exec(`
-            INSERT INTO layanan (nama_layanan, harga) VALUES 
-            ('Cuci Kering', 10000),
-            ('Cuci Setrika', 15000),
-            ('Setrika Saja', 8000);
+            INSERT INTO layanan (nama_layanan, deskripsi, harga) VALUES 
+            ('Cuci Kering', 'Cuci kering dengan harga per kilogram', 10000),
+            ('Cuci Setrika', 'Cuci dan setrika', 15000),
+            ('Setrika Saja', 'Setrika saja', 8000);
         `);
     }
 
