@@ -1,7 +1,7 @@
 import { createSignal, onMount } from "solid-js";
 
 export default function LayananForm({ handler, data }) {
-    const [layananData, setLayananData] = createSignal({});
+    const [layananData, setLayananData] = createSignal();
     const [submitting, setSubmitting] = createSignal(false);
 
     onMount(() => {
@@ -20,6 +20,7 @@ export default function LayananForm({ handler, data }) {
 
                 <label class="label">Nama Layanan</label>
                 <input
+                    required
                     name="nama_layanan"
                     type="text"
                     class="input"
@@ -29,6 +30,7 @@ export default function LayananForm({ handler, data }) {
 
                 <label class="label">Deskripsi</label>
                 <textarea
+                    required
                     name="deskripsi"
                     type="text"
                     placeholder="Mencuci uangmu 100% bebas pajak"
@@ -38,6 +40,7 @@ export default function LayananForm({ handler, data }) {
 
                 <label class="label">Harga (Rp)</label>
                 <input
+                    required
                     class="input"
                     name="harga"
                     type="number"
