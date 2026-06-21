@@ -16,13 +16,14 @@ export async function get(path) {
 }
 
 export async function post(path, data) {
-    let rawData = Object.fromEntries(data.entries());
+    const reqData = JSON.stringify(Object.fromEntries(data));
+
     const [res, err] = await fetch(API_URL + path, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify(rawData)
+        body: reqData,
     })
         .then((response) => [response, null])
         .catch((error) => [null, error]);

@@ -1,17 +1,20 @@
+import { redirect, useNavigate } from "@solidjs/router";
 import { post } from "../utils/api";
 
 export default function BuatLayanan() {
+    const navigate = useNavigate();
+
     async function handleForm(event) {
         event.preventDefault();
         let formData = new FormData(event.target);
 
-        const [res, err] = post("layanan", formData);
+        const [res, err] = await post("layanan", formData);
         if (err) {
             alert(err);
             return;
         }
 
-        console.log(res);
+        navigate("/layanan");
     }
 
     return (
@@ -28,6 +31,14 @@ export default function BuatLayanan() {
                             class="input"
                             placeholder="Cuci Uang"
                         />
+
+                        <label class="label">Deskripsi</label>
+                        <textarea
+                            name="deskripsi"
+                            type="text"
+                            placeholder="Mencuci uangmu 100% bebas pajak"
+                            class="textarea"
+                        ></textarea>
 
                         <label class="label">Harga (Rp)</label>
                         <input
