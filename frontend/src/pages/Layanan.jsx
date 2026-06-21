@@ -16,6 +16,7 @@ export default function Layanan() {
             return;
         }
 
+        console.log(res);
         setLayanan(res);
         setIsLoading(false);
     });
@@ -44,14 +45,17 @@ export default function Layanan() {
                     <div class="grid grid-cols-2 gap-4">
                         <For each={layanan()}>
                             {(item, index) => (
-                                <div class="border p-4 bg-white shadow-md">
-                                    <p class="font-semibold text-xl text-center">
-                                        {item.nama_layanan}
-                                    </p>
-                                    <p class="text-success text-center font-semibold">
-                                        {formatRupiah(item.harga)}
-                                    </p>
-                                    <button class="btn btn-primary mt-4 w-full">
+                                <div class="border rounded-md border-black/20 p-4 bg-white shadow-md flex flex-col gap-4">
+                                    <div class="flex justify-between items-center">
+                                        <p class="font-semibold text-xl text-center">
+                                            {item.nama_layanan}
+                                        </p>
+                                        <p class="text-success text-center font-semibold">
+                                            {formatRupiah(item.harga)}
+                                        </p>
+                                    </div>
+                                    <p>{item.deskripsi}</p>
+                                    <button class="btn btn-primary w-full mt-2">
                                         <Pencil class="size-6" />
                                         Edit
                                     </button>
