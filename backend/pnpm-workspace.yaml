@@ -1,0 +1,4 @@
+allowBuilds:
+  '@scarf/scarf': true
+  puppeteer: true
+  sqlite3: true
