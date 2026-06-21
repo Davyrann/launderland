@@ -1,4 +1,4 @@
-import { createSignal, onMount, Show } from "solid-js";
+import { createSignal, For, onMount, Show } from "solid-js";
 import Loading from "../components/Loading.jsx";
 import { get } from "../utils/api.js";
 import { A } from "@solidjs/router";
@@ -10,7 +10,6 @@ export default function Dashboard() {
     const [isLoading, setIsLoading] = createSignal(true);
 
     onMount(async () => {
-        console.log(pesanan == true);
         const [res, err] = await get("pesanan");
 
         if (err) {
@@ -51,34 +50,32 @@ export default function Dashboard() {
                         }
                     >
                         <div class="overflow-x-auto">
-                            <table class="table table-zebra border-2 border-black/20 shadow-md bg-white">
+                            <table class="table table-zebra shadow-md bg-white">
                                 <thead class="bg-lprimary-600 text-white">
                                     <tr>
                                         <th>Resi</th>
                                         <th>Pelanggan</th>
                                         <th>Status</th>
                                         <th>Layanan</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Hlo</td>
-                                        <td>Hlo</td>
-                                        <td>Hlo</td>
-                                        <td>Hlo</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Hlo</td>
-                                        <td>Hlo</td>
-                                        <td>Hlo</td>
-                                        <td>Hlo</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Hlo</td>
-                                        <td>Hlo</td>
-                                        <td>Hlo</td>
-                                        <td>Hlo</td>
-                                    </tr>
+                                    <For each={pesanan()}>
+                                        {(item, index) => (
+                                            <tr class="*:first:border-l *:border-black/20 *:border-b *:last:border-r">
+                                                <td>{item.no_resi}</td>
+                                                <td>{item.nama_pelanggan}</td>
+                                                <td>{item.status_proses}</td>
+                                                <td>{item.nama_layanan}</td>
+                                                <td>
+                                                    <button class="btn btn-primary w-full">
+                                                        Detail
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </For>
                                 </tbody>
                             </table>
                         </div>
