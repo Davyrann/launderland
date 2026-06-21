@@ -33,7 +33,7 @@ export default function Layanan() {
 
     return (
         <main class="p-4 relative">
-            <div class="max-w-4xl mx-auto flex flex-col h-full">
+            <div class="max-w-4xl mx-auto flex flex-col h-full overflow-auto">
                 <div class="my-4 mb-8 flex justify-between">
                     <h2 class="font-bold text-2xl">Daftar Layanan</h2>
                     <A href="/buat-layanan" class="btn btn-lprimary">
@@ -46,7 +46,7 @@ export default function Layanan() {
                         <For each={layanan()}>
                             {(item, index) => (
                                 <div class="border rounded-md border-black/20 p-4 bg-white shadow-md flex flex-col gap-4">
-                                    <div class="flex justify-between items-center">
+                                    <div class="flex flex-col sm:flex-row justify-between items-center">
                                         <p class="font-semibold text-xl text-center">
                                             {item.nama_layanan}
                                         </p>
@@ -54,7 +54,7 @@ export default function Layanan() {
                                             {formatRupiah(item.harga)}
                                         </p>
                                     </div>
-                                    <p>{item.deskripsi}</p>
+                                    <p class="grow">{item.deskripsi}</p>
                                     <A
                                         href="/edit-layanan"
                                         state={item}
