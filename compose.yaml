@@ -1,7 +1,12 @@
 services:
-  web:
-    image: nginx:1.30-alpine
+  api:
+    build: backend
+    working_dir: /app
+    entrypoint: node src/app.js
     ports:
-      - 3000:80
-    volumes:
-      - .:/usr/share/nginx/html
+    - 3000:3000
+
+  web:
+    build: frontend
+    ports:
+    - 8080:80
