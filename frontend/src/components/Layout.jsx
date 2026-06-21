@@ -8,6 +8,7 @@ export default function Layout({ children }) {
         { href: "/dashboard", name: "Dashboard" },
         { href: "/layanan", name: "Layanan" },
         { href: "/laporan", name: "Laporan" },
+        { href: "/koneksi-whatsapp", name: "Koneksi WhatsApp" },
     ];
 
     return (
