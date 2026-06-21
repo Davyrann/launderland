@@ -1,8 +1,23 @@
+import { createSignal, For, onMount } from "solid-js";
+import { get, post } from "../utils/api";
+
 export default function BuatPesanan() {
-    function handleForm(event) {
+    const [layanan, setLayanan] = createSignal([]);
+
+    onMount(async () => {
+        const [res, err] = await get("layanan");
+        if (err) {
+            alert("Ada yang salah");
+            return;
+        }
+
+        setLayanan(res);
+    });
+
+    async function handleForm(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
-        console.log(formData);
+        const res = await post("pesanan", formData);
     }
 
     return (
@@ -14,6 +29,7 @@ export default function BuatPesanan() {
 
                         <label class="label">Nama Pelanggan</label>
                         <input
+                            required
                             name="nama_pelanggan"
                             type="text"
                             class="input"
@@ -22,6 +38,7 @@ export default function BuatPesanan() {
 
                         <label class="label">Nama Pelanggan</label>
                         <input
+                            required
                             name="no_hp"
                             type="number"
                             class="input"
@@ -29,12 +46,23 @@ export default function BuatPesanan() {
                         />
 
                         <label class="label">Layanan</label>
-                        <select name="layanan_id" class="select">
-                            <option value="Cuci Uang">Cuci Uang</option>
+                        <select
+                            name="layanan_id"
+                            class="select"
+                            disabled={!layanan().length}
+                        >
+                            <For each={layanan()}>
+                                {(item, index) => (
+                                    <option value={item.id}>
+                                        {item.nama_layanan}
+                                    </option>
+                                )}
+                            </For>
                         </select>
 
                         <label class="label">Berat Barang</label>
                         <input
+                            required
                             name="berat"
                             type="number"
                             class="input"
