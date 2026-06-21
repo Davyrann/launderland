@@ -16,9 +16,13 @@ export async function get(path) {
 }
 
 export async function post(path, data) {
+    let rawData = Object.fromEntries(data.entries());
     const [res, err] = await fetch(API_URL + path, {
         method: "POST",
-        body: data,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(rawData)
     })
         .then((response) => [response, null])
         .catch((error) => [null, error]);

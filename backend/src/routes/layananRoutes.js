@@ -25,6 +25,8 @@ const router = express.Router();
  *                     type: integer
  *                   nama_layanan:
  *                     type: string
+ *                   deskripsi:
+ *                     type: string
  *                   harga:
  *                     type: number
  *       500:
@@ -55,6 +57,8 @@ router.get('/', listLayanan);
  *             properties:
  *               nama_layanan:
  *                 type: string
+ *               deskripsi:   
+ *                 type: string
  *               harga:
  *                 type: number
  *         application/x-www-form-urlencoded:
@@ -62,9 +66,12 @@ router.get('/', listLayanan);
  *             type: object
  *             required:
  *               - nama_layanan
+ *               - deskripsi
  *               - harga
  *             properties:
  *               nama_layanan:
+ *                 type: string
+ *               deskripsi:
  *                 type: string
  *               harga:
  *                 type: number
@@ -79,6 +86,8 @@ router.get('/', listLayanan);
  *                 id:
  *                   type: integer
  *                 nama_layanan:
+ *                   type: string
+ *                 deskripsi:
  *                   type: string
  *                 harga:
  *                   type: number
@@ -125,10 +134,13 @@ router.post('/', buatLayanan);
  *             properties:
  *               nama_layanan:
  *                 type: string
+ *               deskripsi:
+ *                 type: string
  *               harga:
  *                 type: number
  *             example:
  *               nama_layanan: "Cuci Kiloan"
+ *               deskripsi: "Cuci kering dengan harga per kilogram"
  *               harga: 7000
  *     responses:
  *       200:

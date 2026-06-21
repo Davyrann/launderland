@@ -14,16 +14,20 @@ const listLayanan = async (req, res) => {
 const buatLayanan = async (req, res) => {
     try {
         const db = await connectDB();
-        const { nama_layanan, harga } = req.body;
+        const { nama_layanan, deskripsi, harga } = req.body;
 
         if (!nama_layanan) {
             return res.status(400).json({ error: 'Field \'nama_layanan\' harus diisi' });
+        
+        } else if (!deskripsi) {
+            return res.status(400).json({ error: 'Field \'deskripsi\' harus diisi' });
+        
         } else if (harga === undefined || isNaN(harga) || harga < 0) {
             return res.status(400).json({ error: 'Field \'harga\' harus berupa angka positif' });
         }
         
-        const result = await db.run('INSERT INTO layanan (nama_layanan, harga) VALUES (?, ?)', [nama_layanan, harga]);
-        res.status(201).json({ id: result.lastID, nama_layanan, harga });
+        const result = await db.run('INSERT INTO layanan (nama_layanan, deskripsi, harga) VALUES (?, ?, ?)', [nama_layanan, deskripsi, harga]);
+        res.status(201).json({ id: result.lastID, nama_layanan, deskripsi, harga });
     } catch (error) {
         console.error('Error creating layanan:', error);
         res.status(500).json({ error: 'Internal Server Error' });
@@ -34,13 +38,20 @@ const editLayanan = async (req, res) => {
     try {
         const db = await connectDB();
         const { id } = req.params;
-        const { nama_layanan, harga } = req.body;
+        const { nama_layanan, deskripsi, harga } = req.body;
+        
         if (!nama_layanan) {
             return res.status(400).json({ error: 'Field \'nama_layanan\' harus diisi' });
+        
+        } else if (!deskripsi) {
+            return res.status(400).json({ error: 'Field \'deskripsi\' harus diisi' });
+        
         } else if (harga === undefined || isNaN(harga) || harga < 0) {
             return res.status(400).json({ error: 'Field \'harga\' harus berupa angka positif' });
         }
-        await db.run('UPDATE layanan SET nama_layanan = ?, harga = ? WHERE id = ?', [nama_layanan, harga, id]);
+        
+        await db.run('UPDATE layanan SET nama_layanan = ?, deskripsi = ?, harga = ? WHERE id = ?', [nama_layanan, deskripsi, harga, id]);
+        
         res.json({ message: 'Layanan updated successfully' });
     } catch (error) {
         console.error('Error updating layanan:', error);
@@ -52,6 +63,9 @@ const deleteLayanan = async (req, res) => {
     try {
         const db = await connectDB();
         const { id } = req.params;
+        if (!id) {
+            return res.status(400).json({ error: 'Parameter \'id\' harus diisi' });
+        }
         await db.run('DELETE FROM layanan WHERE id = ?', [id]);
         res.json({ message: 'Layanan deleted successfully' });
     } catch (error) {
