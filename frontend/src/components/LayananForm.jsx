@@ -10,9 +10,9 @@ export default function LayananForm({ handler, data }) {
 
     return (
         <form
-            onSubmit={() => {
+            onSubmit={(event) => {
                 setSubmitting(true);
-                handler();
+                handler(event);
             }}
         >
             <fieldset class="fieldset bg-white border-base-300 rounded-box w-xs border p-4">
