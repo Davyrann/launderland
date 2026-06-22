@@ -7,7 +7,7 @@ export default function Layout({ children }) {
     const NAV = [
         { href: "/dashboard", name: "Dashboard" },
         { href: "/layanan", name: "Layanan" },
-        { href: "/laporan", name: "Laporan" },
+        { href: "/laporan", name: "Laporan" }
     ];
 
     return (

@@ -9,6 +9,7 @@ import Layanan from "./pages/Layanan";
 import Layout from "./components/Layout";
 import BuatPesanan from "./pages/BuatPesanan";
 import BuatLayanan from "./pages/BuatLayanan";
+import KoneksiWhatsapp from "./pages/koneksiWhatsapp";
 import EditLayanan from "./pages/EditLayanan";
 import NotFound from "./pages/NotFound";
 import DetailPesanan from "./pages/DetailPesanan";
@@ -24,10 +25,9 @@ render(
             <Route path="/layanan" component={Layanan} />
             <Route path="/pesanan/buat" component={BuatPesanan} />
             <Route path="/pesanan/detail" component={DetailPesanan} />
-            <Route path="/layanan/buat" component={BuatLayanan} />
             <Route path="/layanan/edit" component={EditLayanan} />
             <Route path="*404" component={NotFound} />
         </Router>
     ),
-    root,
+    root
 );
