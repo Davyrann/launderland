@@ -1,5 +1,7 @@
 import { createSignal, For, onMount, Show } from "solid-js";
 import { get } from "../utils/api";
+import { formatRupiah } from "../utils/formatter.js";
+
 import Loading from "../components/Loading.jsx";
 import Pencil from "../assets/svg/Pencil.jsx";
 import Plus from "../assets/svg/Plus.jsx";
@@ -21,22 +23,12 @@ export default function Layanan() {
         setIsLoading(false);
     });
 
-    function formatRupiah(val) {
-        const formatter = new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR",
-            maximumFractionDigits: 0,
-        });
-
-        return formatter.format(val);
-    }
-
     return (
         <main class="p-4 relative">
-            <div class="max-w-4xl mx-auto flex flex-col h-full">
+            <div class="max-w-4xl mx-auto flex flex-col h-full overflow-auto">
                 <div class="my-4 mb-8 flex justify-between">
                     <h2 class="font-bold text-2xl">Daftar Layanan</h2>
-                    <A href="/buat-layanan" class="btn btn-lprimary">
+                    <A href="/layanan/buat" class="btn btn-lprimary">
                         <Plus class="size-5" />
                         Tambah Layanan
                     </A>
@@ -46,7 +38,7 @@ export default function Layanan() {
                         <For each={layanan()}>
                             {(item, index) => (
                                 <div class="border rounded-md border-black/20 p-4 bg-white shadow-md flex flex-col gap-4">
-                                    <div class="flex justify-between items-center">
+                                    <div class="flex flex-col sm:flex-row justify-between items-center">
                                         <p class="font-semibold text-xl text-center">
                                             {item.nama_layanan}
                                         </p>
@@ -54,11 +46,15 @@ export default function Layanan() {
                                             {formatRupiah(item.harga)}
                                         </p>
                                     </div>
-                                    <p>{item.deskripsi}</p>
-                                    <button class="btn btn-primary w-full mt-2">
+                                    <p class="grow">{item.deskripsi}</p>
+                                    <A
+                                        href="/layanan/edit"
+                                        state={item}
+                                        class="btn btn-primary w-full mt-2"
+                                    >
                                         <Pencil class="size-6" />
                                         Edit
-                                    </button>
+                                    </A>
                                 </div>
                             )}
                         </For>

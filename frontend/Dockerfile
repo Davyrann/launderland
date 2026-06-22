@@ -11,6 +11,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 RUN pnpm build
+RUN pnpm store prune
 
 FROM nginx:stable-alpine
 

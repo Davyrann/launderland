@@ -51,6 +51,13 @@ const initDB = async () => {
             ('Setrika Saja', 'Setrika saja', 8000);
         `);
     }
+    
+    const pesananCount = await db.get(`SELECT COUNT(*) as count FROM pesanan`)
+    if (pesananCount.count === 0) {
+        await db.exec(`
+            INSERT INTO pesanan (no_resi, berat, total_harga, pelanggan_id, layanan_id, status_proses, status_pembayaran, metode_pembayaran, tanggal_masuk)
+            `)
+    }
 
     console.log('LaunderLand database initialized successfully.')
 }

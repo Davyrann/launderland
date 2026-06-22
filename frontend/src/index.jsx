@@ -10,7 +10,9 @@ import Layout from "./components/Layout";
 import BuatPesanan from "./pages/BuatPesanan";
 import BuatLayanan from "./pages/BuatLayanan";
 import KoneksiWhatsapp from "./pages/koneksiWhatsapp";
+import EditLayanan from "./pages/EditLayanan";
 import NotFound from "./pages/NotFound";
+import DetailPesanan from "./pages/DetailPesanan";
 
 const root = document.getElementById("root");
 
@@ -21,11 +23,11 @@ render(
             <Route path="/dashboard" component={Dashboard} />
             <Route path="/laporan" component={Laporan} />
             <Route path="/layanan" component={Layanan} />
-            <Route path="/buat-pesanan" component={BuatPesanan} />
-            <Route path="/buat-layanan" component={BuatLayanan} />
-            <Route path="/koneksi-whatsapp" component={KoneksiWhatsapp} />
+            <Route path="/pesanan/buat" component={BuatPesanan} />
+            <Route path="/pesanan/detail" component={DetailPesanan} />
+            <Route path="/layanan/edit" component={EditLayanan} />
             <Route path="*404" component={NotFound} />
         </Router>
     ),
-    root,
+    root
 );

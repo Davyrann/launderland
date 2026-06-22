@@ -1,8 +1,12 @@
 import { createSignal, For, onMount } from "solid-js";
 import { get, post } from "../utils/api";
+import { useNavigate } from "@solidjs/router";
 
 export default function BuatPesanan() {
+    const navigate = useNavigate();
+
     const [layanan, setLayanan] = createSignal([]);
+    const [submitting, setSubmitting] = createSignal(false);
 
     onMount(async () => {
         const [res, err] = await get("layanan");
@@ -16,8 +20,16 @@ export default function BuatPesanan() {
 
     async function handleForm(event) {
         event.preventDefault();
+        setSubmitting(true);
         const formData = new FormData(event.target);
-        const res = await post("pesanan", formData);
+        const [res, err] = await post("pesanan", formData);
+
+        if (err) {
+            console.log(err);
+            setSubmitting(false);
+        }
+
+        navigate("/dashboard");
     }
 
     return (
@@ -75,7 +87,11 @@ export default function BuatPesanan() {
                             <option value="Saldo">Saldo</option>
                         </select>
 
-                        <button type="submit" class="btn btn-primary mt-4">
+                        <button
+                            disabled={submitting()}
+                            type="submit"
+                            class="btn btn-primary mt-4"
+                        >
                             Buat Pesanan
                         </button>
                     </fieldset>
