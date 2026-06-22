@@ -6,6 +6,13 @@ import { A } from "@solidjs/router";
 import Plus from "../assets/svg/Plus.jsx";
 
 export default function Dashboard() {
+    const statusStyle = {
+        antri: "bg-gray-500 border-2 border-gray-600",
+        proses: "bg-orange-500 border-2 border-orange-600",
+        selesai: "bg-green-500 border-2 border-green-600",
+        diambil: "bg-purple-500 border-2 border-purple-600",
+    };
+
     const [pesanan, setPesanan] = createSignal();
     const [isLoading, setIsLoading] = createSignal(true);
 
@@ -66,7 +73,18 @@ export default function Dashboard() {
                                             <tr class="*:first:border-l *:border-black/20 *:border-b *:last:border-r">
                                                 <td>{item.no_resi}</td>
                                                 <td>{item.nama_pelanggan}</td>
-                                                <td>{item.status_proses}</td>
+                                                <td>
+                                                    <span
+                                                        class={`w-full font-semibold py-4 badge badge-primary ${statusStyle[item.status_proses]}`}
+                                                    >
+                                                        {item.status_proses
+                                                            .charAt(0)
+                                                            .toUpperCase() +
+                                                            item.status_proses.slice(
+                                                                1,
+                                                            )}
+                                                    </span>
+                                                </td>
                                                 <td>{item.nama_layanan}</td>
                                                 <td>
                                                     <A
