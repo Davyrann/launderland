@@ -9,7 +9,6 @@ export function formatRupiah(val) {
 }
 
 export function formatTanggal(val) {
-    console.log(val);
     const formattedDate = new Date(val).toLocaleDateString("id-ID", {
         dateStyle: "medium",
     });

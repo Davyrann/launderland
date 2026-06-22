@@ -47,7 +47,6 @@ export default function Laporan() {
                 date: item.tanggal_masuk,
             })),
         );
-        console.log(data);
         setData(data);
         setIsLoading(false);
     });
