@@ -2,6 +2,7 @@ import { createSignal, onMount, Show } from "solid-js";
 
 import { get } from "../utils/api.js";
 import {
+    formatRupiah,
     formatTanggal,
     hitungRevenueSampaiHariIni,
 } from "../utils/formatter.js";
@@ -62,11 +63,11 @@ export default function Laporan() {
                 <Show when={data()}>
                     <Chart data={data()} class="pb-10" height={600}>
                         <Axis axis="y" position="left">
-                            <AxisLabel />
+                            <AxisLabel format={formatRupiah} />
                             <AxisGrid class="opacity-20" />
                         </Axis>
                         <Axis axis="x" position="bottom" dataKey="date">
-                            <AxisLabel />
+                            <AxisLabel format={formatTanggal} />
                             <AxisLine />
                         </Axis>
                         <Bar

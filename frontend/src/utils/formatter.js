@@ -47,7 +47,7 @@ export function hitungRevenueSampaiHariIni(data) {
         const tglStr = formatDate(targetDate);
 
         hasilMingguan.push({
-            date: formatTanggal(tglStr),
+            date: tglStr,
             totalPrice: mapRevenue[tglStr] || 0,
         });
     }
