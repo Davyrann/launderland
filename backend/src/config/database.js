@@ -106,7 +106,7 @@ const initDB = async () => {
                 `, [noResi, berat, totalHarga, statusProses, statusPembayaran, metodePembayaran, tanggalMasuk, pelanggan.id, layanan.id]);
             }
         }
-        console.log('Dummy orders generated successfully.');
+        console.log('Dummy data generate.');
     }
 
     console.log('LaunderLand database initialized successfully.')

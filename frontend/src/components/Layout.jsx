@@ -7,8 +7,7 @@ export default function Layout({ children }) {
     const NAV = [
         { href: "/dashboard", name: "Dashboard" },
         { href: "/layanan", name: "Layanan" },
-        { href: "/laporan", name: "Laporan" },
-        { href: "/koneksi-whatsapp", name: "Koneksi WhatsApp" },
+        { href: "/laporan", name: "Laporan" }
     ];
 
     return (
